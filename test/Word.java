@@ -9,15 +9,15 @@ public class Word {
     private final int row;
     private final boolean vertical;
 
-    public Word(Tile[] tiles, int col, int row, boolean vertical) {
-        this.tiles = Arrays.copyOf(tiles, tiles.length);
+    public Word(Tile[] tiles, int row, int col, boolean vertical) {
+        this.tiles = tiles;
         this.col = col;
         this.row = row;
         this.vertical = vertical;
     }
 
     public Tile[] getTiles() {
-        return Arrays.copyOf(tiles, tiles.length);
+        return tiles;
     }
 
     public int getCol() {
@@ -32,20 +32,32 @@ public class Word {
         return vertical;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (obj == null) {
             return false;
-        Word word = (Word) o;
-        return col == word.col && row == word.row && vertical == word.vertical && Arrays.equals(tiles, word.tiles);
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Word check = (Word) obj;
+        return Arrays.equals(check.tiles, tiles) && row == check.row && col == check.col && vertical == check.vertical;
     }
+    // public boolean equals(Object o) {
+    // if (this == o)
+    // return true;
+    // if (o == null || getClass() != o.getClass())
+    // return false;
+    // Word word = (Word) o;
+    // return col == word.col && row == word.row && vertical == word.vertical &&
+    // Arrays.equals(tiles, word.tiles);
+    // }
 
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(col, row, vertical);
-        result = 31 * result + Arrays.hashCode(tiles);
-        return result;
-    }
+    // public int hashCode() {
+    // int result = Objects.hash(col, row, vertical);
+    // result = 31 * result + Arrays.hashCode(tiles);
+    // return result;
+    // }
 }

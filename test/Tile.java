@@ -19,7 +19,6 @@ public class Tile {
         private final int[] quantities;
         private final int[] maxQuantities;
         private final Tile[] tiles;
-        private final Map<Character, Integer> letterToScore;
         private int size;
 
         private Bag() {
@@ -52,7 +51,7 @@ public class Tile {
                     1, // Z
             };
             this.maxQuantities = quantities.clone();
-            this.letterToScore = new HashMap<Character, Integer>();
+            new HashMap<Character, Integer>();
             tiles = new Tile[] {
                     new Tile('A', 1),
                     new Tile('B', 3),
@@ -132,10 +131,6 @@ public class Tile {
 
         public int[] getQuantities() {
             return Arrays.copyOf(quantities, quantities.length);
-        }
-
-        private int getScore(char letter) {
-            return letterToScore.get(letter);
         }
 
     }
