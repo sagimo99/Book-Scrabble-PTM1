@@ -1,5 +1,7 @@
-package test;
+package test.EX1;
 
+import test.Tile;
+import test.Word;
 import test.Tile.Bag;
 
 public class MainTrain {
