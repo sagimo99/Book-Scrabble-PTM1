@@ -1,4 +1,4 @@
-package test.EX2;
+package test;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;

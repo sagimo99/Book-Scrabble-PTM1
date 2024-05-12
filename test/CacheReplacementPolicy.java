@@ -1,4 +1,4 @@
-package test.EX2;
+package test;
 
 public interface CacheReplacementPolicy {
     void add(String word);

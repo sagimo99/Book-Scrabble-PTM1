@@ -1,10 +1,10 @@
-package test.EX1;
+package test;
 
 import test.Tile;
 import test.Word;
 import test.Tile.Bag;
 
-public class MainTrain {
+public class MainTrain1 {
 
     public static void testBag() {
         Bag b = Tile.Bag.getBag();

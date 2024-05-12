@@ -45,19 +45,5 @@ public class Word {
         Word check = (Word) obj;
         return Arrays.equals(check.tiles, tiles) && row == check.row && col == check.col && vertical == check.vertical;
     }
-    // public boolean equals(Object o) {
-    // if (this == o)
-    // return true;
-    // if (o == null || getClass() != o.getClass())
-    // return false;
-    // Word word = (Word) o;
-    // return col == word.col && row == word.row && vertical == word.vertical &&
-    // Arrays.equals(tiles, word.tiles);
-    // }
 
-    // public int hashCode() {
-    // int result = Objects.hash(col, row, vertical);
-    // result = 31 * result + Arrays.hashCode(tiles);
-    // return result;
-    // }
 }
