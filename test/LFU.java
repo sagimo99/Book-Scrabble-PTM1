@@ -1,6 +1,5 @@
 package test;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -38,7 +37,4 @@ public class LFU implements CacheReplacementPolicy {
         throw new NoSuchElementException("Element not found in cache");
     }
 
-    public LinkedHashMap<String, Integer> getCache() {
-        return Cache;
-    }
 }

@@ -2,7 +2,6 @@ package test;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.LinkedHashSet;
 
 public class CacheManager {
     private int maxSize;
