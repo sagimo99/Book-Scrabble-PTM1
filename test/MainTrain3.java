@@ -157,9 +157,8 @@ public class MainTrain3 {
     }
 
     public static void main(String[] args) {
-        System.out.println("hello");
+
         if (testServer()) {
-            System.out.println("111");
             testDM();
             testBSCH();
         }

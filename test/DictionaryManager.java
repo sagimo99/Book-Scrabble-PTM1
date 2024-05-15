@@ -1,71 +1,101 @@
+
 package test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class DictionaryManager {
-    private Map<String, Dictionary> department;
-
-    private static DictionaryManager instance;
+    private static DictionaryManager instance; // for singleton
+    private final Map<String, DictionaryProxy> dictionaryMap;
 
     private DictionaryManager() {
-        department = new HashMap<>();
+        dictionaryMap = new HashMap<>();
     }
 
-    public static synchronized DictionaryManager get() {
-        if (instance == null) {
+    public static DictionaryManager get() { // for singleton
+        if (instance == null)
             instance = new DictionaryManager();
-        }
+
         return instance;
     }
 
-    public boolean query(String... args) {// Checking if the word (last element in args) exists in one of the
-                                          // dictionaries that represents the given files, using quey method
-        String word = args[args.length - 1];
-        boolean wordExists = false;
+    /*
+     * A method that checks if a dictionary with the same file list already
+     * exists.
+     * If it does, the method returns the existing dictionary from the given
+     * structure.
+     * If not, it creates a new dictionary and adds it to the data structure. (The
+     * keys of the dictionaries are defined by their file lists)
+     */
 
-        for (int i = 0; i < args.length - 1; i++) {
-            if (!department.containsKey(args[i])) {
-                department.put(args[i], new Dictionary(args[i]));
+    private ArrayList<DictionaryProxy> getDictionaryProxies(String[] fileNames) {
+        ArrayList<DictionaryProxy> proxies = new ArrayList<DictionaryProxy>();
+        for (String file : fileNames) {
+            if (!dictionaryMap.containsKey(file)) { // saves the files in cach so i dont need to duplicate them -
+                                                    // Flyweight pattern
+                DictionaryProxy pDictionary = new DictionaryProxy(new Dictionary(file));
+                dictionaryMap.put(file, pDictionary);
             }
-
-            if (department.get(args[i]).query(word)) {
-                wordExists = true;
-                // Not returning true because the caches in each dictionary need to be updated
-                // (for later searches)
-            }
+            proxies.add(dictionaryMap.get(file));
         }
 
-        return wordExists;
+        return proxies;
     }
 
-    public boolean challenge(String... args) {// Checking if the word (last element in args) exists in one of the
-                                              // dictionaries that represents the given files, using challenge method
-        String word = args[args.length - 1];
-        boolean wordExists = false;
+    public boolean query(String... args) {
+        boolean exist = false;
+        String[] fileNames = new String[args.length - 1];
+        String searchWord = args[args.length - 1]; // the word i want to search for
+        System.arraycopy(args, 0, fileNames, 0, fileNames.length);
+        ArrayList<DictionaryProxy> proxis = getDictionaryProxies(fileNames);
+        for (DictionaryProxy proxy : proxis) {
+            if (proxy.query(searchWord))
+                exist = true;
+        }
+        return exist;
+    }
 
-        for (int i = 0; i < args.length - 1; i++) {
-            if (!department.containsKey(args[i])) {
-                department.put(args[i], new Dictionary(args[i]));
-            }
+    public boolean challenge(String... args) {
+        boolean exist = false;
+        String[] fileNames = new String[args.length - 1];
+        String searchWord = args[args.length - 1]; // the word i want to search for
+        System.arraycopy(args, 0, fileNames, 0, fileNames.length);
 
-            if (department.get(args[i]).challenge(word)) {
-                wordExists = true;
-                // Not returning true because the caches in each dictionary need to be updated
-                // (for later searches)
-            }
+        ArrayList<DictionaryProxy> proxies = getDictionaryProxies(fileNames);
+        for (DictionaryProxy proxy : proxies) {
+            if (proxy.challenge(searchWord))
+                exist = true;
+        }
+        return exist;
+    }
+
+    int getSize() {
+        int size = 0;
+        for (DictionaryProxy pDic : dictionaryMap.values()) {
+            if (pDic != null)
+                size++;
+        }
+        return size;
+    }
+
+    // A class that represents a proxy for the original Dictionary class
+    public class DictionaryProxy extends Dictionary {
+        private final Dictionary dictionary;
+
+        public DictionaryProxy(Dictionary dictionary) {
+            this.dictionary = dictionary;
         }
 
-        return wordExists;
+        @Override
+        public boolean query(String word) {
+            return dictionary.query(word);
+        }
+
+        @Override
+        public boolean challenge(String word) {
+            return dictionary.challenge(word);
+        }
     }
 
-    private Dictionary getDictionaryForBook(String book) {
-        return department.computeIfAbsent(book, k -> new Dictionary(book + ".txt"));
-    }
-
-    public int getSize() {
-        return department.size();
-    }
 }

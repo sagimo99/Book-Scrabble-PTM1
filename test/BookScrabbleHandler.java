@@ -1,42 +1,41 @@
+
 package test;
 
-import java.io.OutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class BookScrabbleHandler implements ClientHandler {
-    DictionaryManager dm;
     PrintWriter out;
-    Scanner in;
+    private Scanner in;
+    private boolean CheckIfExist;
 
     @Override
     public void handleClient(InputStream inFromClient, OutputStream outToClient) {
         out = new PrintWriter(outToClient);
         in = new Scanner(inFromClient);
-        dm = DictionaryManager.get();
+        String text = in.nextLine();
+        String[] words = text.split(",");
+        String wantedSearch = words[0];
 
-        String[] inputFromClient = in.next().split(",");
-        boolean wordExists = false;
+        String[] fileNames = new String[words.length - 1];
+        System.arraycopy(words, 1, fileNames, 0, fileNames.length);
 
-        if (inputFromClient.equals('Q')) {
-            // Deletes the 'Q' from the array, calling quary with just the files names and
-            // the word to check
-            wordExists = dm.query(Arrays.copyOfRange(inputFromClient, 1, inputFromClient.length));
-        } else {// 'C'
-                // Deletes the 'C' from the array, calling challenge with just the files names
-                // and the word to check
-            wordExists = dm.challenge(Arrays.copyOfRange(inputFromClient, 1, inputFromClient.length));
-        }
+        DictionaryManager dm = DictionaryManager.get();
+        if (wantedSearch.equals("Q"))
+            CheckIfExist = dm.query(fileNames);
 
-        out.println(wordExists ? "true" : "false");
+        else if (wantedSearch.equals("C"))
+            CheckIfExist = dm.challenge(fileNames);
+
+        out.print(CheckIfExist);
         out.flush();
     }
 
     @Override
     public void close() {
-        out.close();
         in.close();
+        out.close();
     }
 }
